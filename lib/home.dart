@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +8,9 @@ import 'package:vegafruits/providers/data_provider.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
+  int newOrders = 0;
+  final dataProvider = DataProvider();
+
   final DataProvider provider = DataProvider();
   Home({super.key});
 
@@ -17,8 +20,17 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
+  void initState() {
+    setState(() {
+      widget.newOrders = widget.dataProvider.newOrders.length;
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dataProvider = Provider.of<DataProvider>(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -45,25 +57,39 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: [
                   Text(
-                    'NEW ORDERS - ${dataProvider.newOrders.length}',
+                    'NEW ORDERS - ${widget.newOrders}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Expanded(
                     child: FutureBuilder(
                         future: dataProvider.getAllOrders(),
                         builder: (context, snapshot) {
-                          if (dataProvider.newOrders.isNotEmpty) {
+                          widget.newOrders = dataProvider.newOrders.length;
+                          if (snapshot.hasData) {
+                            return RefreshIndicator(
+                                onRefresh: dataProvider.refreshData,
+                                child: Center(
+                                    child: ListView(
+                                  children: const [
+                                    Center(child: CircularProgressIndicator()),
+                                  ],
+                                )));
+                          } else {
                             return dataProvider.newOrders.isEmpty
                                 ? RefreshIndicator(
                                     onRefresh: dataProvider.refreshData,
-                                    child: Center(
-                                        child: Text(
-                                      "No New Order",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    )),
+                                    child: ListView(
+                                      children: const [
+                                        Center(
+                                            child: Text(
+                                          "No New Order",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )),
+                                      ],
+                                    ),
                                   )
                                 : RefreshIndicator(
                                     onRefresh: dataProvider.refreshData,
@@ -78,6 +104,16 @@ class _HomeState extends State<Home> {
                                             totalAmount =
                                                 totalAmount + item.price!;
                                           }
+                                          DateTime formattedDate1 =
+                                              DateTime.parse(dataProvider
+                                                  .newOrders[index].date!);
+                                          DateTime formattedDate2 =
+                                              DateTime.parse(dataProvider
+                                                  .newOrders[index]
+                                                  .deliveryDate!);
+                                          DateFormat dateFormat =
+                                              DateFormat('dd MMM, yyyy');
+
                                           String formattedTotalAmount =
                                               NumberFormat('#,##0')
                                                   .format(totalAmount);
@@ -180,41 +216,25 @@ class _HomeState extends State<Home> {
                                                         color: Color.fromARGB(
                                                             66, 241, 193, 59),
                                                       ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                              style: TextStyle(
-                                                                  fontSize: 12),
-                                                              "Customer: ${dataProvider.newOrders[index].customer!.name}"),
-                                                          Container(
-                                                            width: 2,
-                                                            height: 20,
-                                                            color:
-                                                                Colors.orange,
-                                                          ),
-                                                          Text(
-                                                              style: TextStyle(
-                                                                  fontSize: 12),
-                                                              "Created at: ${dataProvider.newOrders[index].date}"),
-                                                        ],
+                                                      SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Text(
+                                                            style: TextStyle(
+                                                                fontSize: 12),
+                                                            "Customer: ${dataProvider.newOrders[index].customer!.name}"),
                                                       ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                              style: TextStyle(
-                                                                  fontSize: 12),
-                                                              "Delivery:  ${dataProvider.newOrders[index].deliveryLocation}"),
-                                                          Text(
-                                                              style: TextStyle(
-                                                                  fontSize: 12),
-                                                              "On ${dataProvider.newOrders[index].deliveryDate} at ${dataProvider.newOrders[index].deliveryTime}"),
-                                                        ],
+                                                      Text(
+                                                          style: TextStyle(
+                                                              fontSize: 12),
+                                                          "Created at: ${dateFormat.format(formattedDate1)}"),
+                                                      SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Text(
+                                                            style: TextStyle(
+                                                                fontSize: 12),
+                                                            "Delivery:  ${dataProvider.newOrders[index].deliveryLocation} On ${dateFormat.format(formattedDate2)} at ${dataProvider.newOrders[index].deliveryTime}"),
                                                       ),
                                                       Divider(
                                                         color: Color.fromARGB(
@@ -234,8 +254,7 @@ class _HomeState extends State<Home> {
                                                                 backgroundColor:
                                                                     MaterialStateProperty.all<
                                                                             Color>(
-                                                                        Colors
-                                                                            .green),
+                                                                        Color.fromARGB(255, 88, 1, 58)),
                                                                 foregroundColor:
                                                                     MaterialStateProperty.all<
                                                                             Color>(
@@ -363,7 +382,7 @@ class _HomeState extends State<Home> {
                                                                 "Already Contacted",
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                        10),
+                                                                        12),
                                                               ),
                                                             )
                                                     ],
@@ -373,15 +392,6 @@ class _HomeState extends State<Home> {
                                             ),
                                           );
                                         }));
-                          } else {
-                            return RefreshIndicator(
-                                onRefresh: dataProvider.refreshData,
-                                child: Center(
-                                    child: ListView(
-                                  children: const [
-                                    Center(child: Text('No New Order')),
-                                  ],
-                                )));
                           }
                         }),
                   ),
