@@ -15,7 +15,8 @@ import 'providers/data_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => DataProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

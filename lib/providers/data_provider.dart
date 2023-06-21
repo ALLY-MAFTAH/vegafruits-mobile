@@ -13,6 +13,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 class DataProvider extends ChangeNotifier {
   bool hasError = false;
+  Order selectedOrder = Order();
 
   //
   //
@@ -114,6 +115,8 @@ class DataProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         print('Order marked as paid successfully!');
         refreshData();
+        notifyListeners();
+
         Get.snackbar("Success", "Order successfull marked as paid",
             backgroundColor: Colors.green, colorText: Colors.white);
       } else {
@@ -164,6 +167,8 @@ class DataProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         print('Order marked as contacted successfully!');
         refreshData();
+        notifyListeners();
+
         Get.snackbar("Success", "Customer successfull marked as contacted",
             backgroundColor: Colors.green, colorText: Colors.white);
       } else {
@@ -220,6 +225,7 @@ class DataProvider extends ChangeNotifier {
         if (response.statusCode == 200) {
           print('Order marked as sold successfully!');
           refreshData();
+          notifyListeners();
           Get.snackbar("Success", "Order successfull marked as sold",
               backgroundColor: Colors.green, colorText: Colors.white);
         } else {

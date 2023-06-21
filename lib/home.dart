@@ -119,9 +119,10 @@ class _HomeState extends State<Home> {
                                                   .format(totalAmount);
                                           return InkWell(
                                             onTap: () {
-                                              Get.to(OrderDetails(
-                                                  order: dataProvider
-                                                      .newOrders[index]));
+                                              setState(() {
+                                              dataProvider.selectedOrder=dataProvider.newOrders[index];
+                                              });
+                                              Get.to(OrderDetails());
                                             },
                                             child: Container(
                                               padding:
