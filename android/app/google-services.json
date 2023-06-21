@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "756000508227",
+    "project_id": "vegafruits-b4999",
+    "storage_bucket": "vegafruits-b4999.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756000508227:android:f268f0f7a3b15b0455c7f6",
+        "android_client_info": {
+          "package_name": "tz.co.vegafruits"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756000508227-j2agf3igqgiksotnaobv81rj3p8opfsb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE6Hwib5B_70kO84B283re3XUJhz-Vf48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756000508227-j2agf3igqgiksotnaobv81rj3p8opfsb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
