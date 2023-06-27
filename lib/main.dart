@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
-import 'home.dart';
+import 'package:vegafruits/layout.dart';
 import 'providers/data_provider.dart';
 
 void main() async {
@@ -113,7 +112,151 @@ class _MyAppState extends State<MyApp> {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: Home()),
+          home: const Layout()),
     );
   }
 }
+
+// import 'package:flutter/material.dart';
+
+// class CustomSideDrawer extends StatefulWidget {
+//   @override
+//   _CustomSideDrawerState createState() => _CustomSideDrawerState();
+// }
+
+// class _CustomSideDrawerState extends State<CustomSideDrawer>
+//     with SingleTickerProviderStateMixin {
+//   late AnimationController _animationController;
+//   late Animation<double> _animation;
+//   bool _isDrawerOpen = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     _animationController = AnimationController(
+//       vsync: this,
+//       duration: Duration(milliseconds: 300),
+//     );
+
+//     _animation = CurvedAnimation(
+//       parent: _animationController,
+//       curve: Curves.easeInOut,
+//     );
+//   }
+
+//   @override
+//   void dispose() {
+//     _animationController.dispose();
+//     super.dispose();
+//   }
+
+//   void _toggleDrawer() {
+//     setState(() {
+//       _isDrawerOpen = !_isDrawerOpen;
+//       if (_isDrawerOpen) {
+//         _animationController.forward();
+//       } else {
+//         _animationController.reverse();
+//       }
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Custom Side Drawer'),
+//         leading: IconButton(
+//           icon: Icon(Icons.menu),
+//           onPressed: _toggleDrawer,
+//         ),
+//       ),
+//       body: Stack(
+//         children: [
+//           GestureDetector(
+//             onTap: () {
+//               if (_isDrawerOpen) {
+//                 _toggleDrawer();
+//               }
+//             },
+//             child: AnimatedContainer(
+//               duration: Duration(milliseconds: 300),
+//               transform: Matrix4.translationValues(
+//                 _isDrawerOpen ? MediaQuery.of(context).size.width * 0.6 : 0,
+//                 0,
+//                  0,
+//               ),
+//               child: Scaffold(
+//                 body: Center(
+//                   child: Text('Main Screen Content'),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Positioned(
+//             top: 0,
+//             bottom: 0,
+//             left: _isDrawerOpen ? 0 : -MediaQuery.of(context).size.width * 0.6,
+//             width: MediaQuery.of(context).size.width * 0.6,
+//             child: SlideTransition(
+//               position: Tween<Offset>(
+//                 begin: Offset(-1, 0),
+//                 end: Offset(0, 0),
+//               ).animate(_animation),
+//               child: GestureDetector(
+//                 onTap: () {
+//                   if (_isDrawerOpen) {
+//                     _toggleDrawer();
+//                   }
+//                 },
+//                 child: Container(
+//                   color: Colors.white,
+//                   child: ListView(
+//                     padding: EdgeInsets.zero,
+//                     children: [
+//                       DrawerHeader(
+//                         decoration: BoxDecoration(
+//                           color: Colors.blue,
+//                         ),
+//                         child: Text(
+//                           'Drawer Header',
+//                           style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: 20,
+//                           ),
+//                         ),
+//                       ),
+//                       ListTile(
+//                         leading: Icon(Icons.home),
+//                         title: Text('Home'),
+//                         onTap: () {
+//                           // Handle drawer item tap
+//                           _toggleDrawer();
+//                         },
+//                       ),
+//                       ListTile(
+//                         leading: Icon(Icons.settings),
+//                         title: Text('Settings'),
+//                         onTap: () {
+//                           // Handle drawer item tap
+//                           _toggleDrawer();
+//                         },
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// void main() {
+//   runApp(MaterialApp(
+//     home: CustomSideDrawer(),
+//   ));
+// }
