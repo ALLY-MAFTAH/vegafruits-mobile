@@ -13,7 +13,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("Home"),
-    );
+        child: Image(
+      image: AssetImage("assets/images/logo.png"),
+      height: 50,
+    ));
   }
 }

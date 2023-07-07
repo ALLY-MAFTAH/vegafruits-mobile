@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:vegafruits/screens/customers_page.dart';
 import 'package:vegafruits/screens/home_page.dart';
 import 'package:vegafruits/screens/orders_page.dart';
 import 'package:vegafruits/screens/sales_page.dart';
@@ -95,7 +96,9 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
                 ? "Orders"
                 : _currentIndex == 2
                     ? "Sales"
-                    : "Stock"),
+                : _currentIndex == 3
+                    ? "Stock"
+                    : "Customers"),
       ),
       body: Stack(
         children: [
@@ -113,7 +116,6 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
                 0,
               ),
               child: Scaffold(
-                backgroundColor: Color.fromARGB(255, 239, 218, 238),
                 body: IndexedStack(
                   index: _currentIndex,
                   children: [
@@ -121,6 +123,7 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
                     OrdersPage(),
                     SalesPage(),
                     StocksPage(),
+                    CustomersPage(),
                   ],
                 ),
               ),
@@ -149,32 +152,33 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
       ),
       bottomNavigationBar: SizeTransition(
         sizeFactor: _animation,
-        child: Container(
-          color: Colors.black, // Set the background color to black
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: _onTabTapped,
-            selectedItemColor: Colors.orange,
-            unselectedItemColor: Colors.grey,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'Orders',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.attach_money),
-                label: 'Sales',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.inventory),
-                label: 'Stock',
-              ),
-            ],
-          ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: _onTabTapped,
+          selectedItemColor: Colors.orange,
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Orders',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.attach_money),
+              label: 'Sales',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.inventory),
+              label: 'Stock',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_2 ),
+              label: 'Customers',
+            ),
+          ],
         ),
       ),
     );

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:vegafruits/order_details.dart';
-import 'package:vegafruits/providers/data_provider.dart';
 import 'package:intl/intl.dart';
+
+import '../providers/data_provider.dart';
+import '../providers/order_provider.dart';
 
 class OrdersPage extends StatefulWidget {
   int newOrders = 0;
-  final dataProvider = DataProvider();
-
-  final DataProvider provider = DataProvider();
+  final OrderProvider orderProv = OrderProvider();
   OrdersPage({super.key});
 
   @override
@@ -22,34 +22,27 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   void initState() {
     setState(() {
-      widget.newOrders = widget.dataProvider.newOrders.length;
+      widget.newOrders = widget.orderProv.newOrders.length;
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final orderProvider = Provider.of<OrderProvider>(context);
     final dataProvider = Provider.of<DataProvider>(context);
 
     return Column(
       children: [
         SizedBox(
-          height: 10,
-        ),
-        Center(
-            child: Image(
-          image: AssetImage("assets/images/logo.png"),
-          height: 50,
-        )),
-        SizedBox(
-          height: 10,
+          height: 20,
         ),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-              color: Color.fromARGB(255, 248, 234, 213),
+              // color: Color.fromARGB(255, 248, 234, 213),
             ),
             padding: const EdgeInsets.all(5),
             child: Column(
@@ -60,9 +53,9 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
                 Expanded(
                   child: FutureBuilder(
-                      future: dataProvider.getAllOrders(),
+                      future: orderProvider.getAllOrders(),
                       builder: (context, snapshot) {
-                        widget.newOrders = dataProvider.newOrders.length;
+                        widget.newOrders = orderProvider.newOrders.length;
                         if (snapshot.hasData) {
                           return RefreshIndicator(
                               onRefresh: dataProvider.refreshData,
@@ -73,7 +66,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                 ],
                               )));
                         } else {
-                          return dataProvider.newOrders.isEmpty
+                          return orderProvider.newOrders.isEmpty
                               ? RefreshIndicator(
                                   onRefresh: dataProvider.refreshData,
                                   child: ListView(
@@ -92,20 +85,20 @@ class _OrdersPageState extends State<OrdersPage> {
                               : RefreshIndicator(
                                   onRefresh: dataProvider.refreshData,
                                   child: ListView.builder(
-                                      itemCount: dataProvider.newOrders.length,
+                                      itemCount: orderProvider.newOrders.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         double totalAmount = 0;
-                                        for (var item in dataProvider
+                                        for (var item in orderProvider
                                             .newOrders[index].items!) {
                                           totalAmount =
                                               totalAmount + item.price!;
                                         }
                                         DateTime formattedDate1 =
-                                            DateTime.parse(dataProvider
+                                            DateTime.parse(orderProvider
                                                 .newOrders[index].date!);
                                         DateTime formattedDate2 =
-                                            DateTime.parse(dataProvider
+                                            DateTime.parse(orderProvider
                                                 .newOrders[index]
                                                 .deliveryDate!);
                                         DateFormat dateFormat =
@@ -117,8 +110,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                         return InkWell(
                                           onTap: () {
                                             setState(() {
-                                              dataProvider.selectedOrder =
-                                                  dataProvider.newOrders[index];
+                                              orderProvider.selectedOrder =
+                                                  orderProvider.newOrders[index];
                                             });
                                             Get.to(OrderDetails());
                                           },
@@ -131,7 +124,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(5),
-                                                  color: Colors.white,
+                                                  color: Color.fromARGB(255, 252, 248, 228),
                                                 ),
                                                 padding:
                                                     const EdgeInsets.all(10),
@@ -143,7 +136,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                               .spaceBetween,
                                                       children: [
                                                         Text(
-                                                          "Order #: ${dataProvider.newOrders[index].number}",
+                                                          "Order #: ${orderProvider.newOrders[index].number}",
                                                           style: TextStyle(
                                                               fontSize: 16,
                                                               color: Color
@@ -159,7 +152,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                         Row(
                                                           children: [
                                                             Icon(
-                                                              dataProvider
+                                                              orderProvider
                                                                           .newOrders[
                                                                               index]
                                                                           .isPaid ==
@@ -167,7 +160,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                                   ? Icons.check
                                                                   : Icons
                                                                       .cancel,
-                                                              color: dataProvider
+                                                              color: orderProvider
                                                                           .newOrders[
                                                                               index]
                                                                           .isPaid ==
@@ -187,7 +180,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                               "$formattedTotalAmount TZS",
                                                               style: TextStyle(
                                                                   fontSize: 16,
-                                                                  color: dataProvider
+                                                                  color: orderProvider
                                                                               .newOrders[
                                                                                   index]
                                                                               .isPaid ==
@@ -219,7 +212,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                       child: Text(
                                                           style: TextStyle(
                                                               fontSize: 12),
-                                                          "Customer: ${dataProvider.newOrders[index].customer!.name}"),
+                                                          "Customer: ${orderProvider.newOrders[index].customer!.name}"),
                                                     ),
                                                     Text(
                                                         style: TextStyle(
@@ -231,7 +224,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                       child: Text(
                                                           style: TextStyle(
                                                               fontSize: 12),
-                                                          "Delivery:  ${dataProvider.newOrders[index].deliveryLocation} On ${dateFormat.format(formattedDate2)} at ${dataProvider.newOrders[index].deliveryTime}"),
+                                                          "Delivery:  ${orderProvider.newOrders[index].deliveryLocation} On ${dateFormat.format(formattedDate2)} at ${orderProvider.newOrders[index].deliveryTime}"),
                                                     ),
                                                     Divider(
                                                       color: Color.fromARGB(
@@ -261,11 +254,11 @@ class _OrdersPageState extends State<OrdersPage> {
                                                                           .white),
                                                             ),
                                                             onPressed: () {
-                                                              dataProvider
+                                                              orderProvider
                                                                   .launchPhoneDialer(
-                                                                      'tel:${dataProvider.newOrders[index].customer!.mobile}');
-                                                              dataProvider.updateOrderIsContacted(
-                                                                  dataProvider
+                                                                      'tel:${orderProvider.newOrders[index].customer!.mobile}');
+                                                              orderProvider.updateOrderIsContacted(
+                                                                  orderProvider
                                                                       .newOrders[
                                                                           index]
                                                                       .id!);
@@ -281,7 +274,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                                       .only(
                                                                   left: 30,
                                                                   right: 30),
-                                                          child: dataProvider
+                                                          child: orderProvider
                                                                       .newOrders[
                                                                           index]
                                                                       .isPaid ==
@@ -312,8 +305,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                                                             ElevatedButton(
                                                                               child: Text('Yes'),
                                                                               onPressed: () {
-                                                                                dataProvider.updateOrderIsPaid(
-                                                                                  dataProvider.newOrders[index].id!,
+                                                                                orderProvider.updateOrderAsPaid(
+                                                                                  orderProvider.newOrders[index].id!,
                                                                                 );
                                                                                 Navigator.of(context).pop();
                                                                               },
@@ -346,11 +339,11 @@ class _OrdersPageState extends State<OrdersPage> {
                                                                           .white),
                                                             ),
                                                             onPressed: () {
-                                                              dataProvider
+                                                              orderProvider
                                                                   .launchMessagingApp(
-                                                                      'sms:${dataProvider.newOrders[index].customer!.mobile}');
-                                                              dataProvider.updateOrderIsContacted(
-                                                                  dataProvider
+                                                                      'sms:${orderProvider.newOrders[index].customer!.mobile}');
+                                                              orderProvider.updateOrderIsContacted(
+                                                                  orderProvider
                                                                       .newOrders[
                                                                           index]
                                                                       .id!);
@@ -362,7 +355,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                         ),
                                                       ],
                                                     ),
-                                                    dataProvider
+                                                    orderProvider
                                                                 .newOrders[
                                                                     index]
                                                                 .wasContacted ==
