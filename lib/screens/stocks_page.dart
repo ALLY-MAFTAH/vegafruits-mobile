@@ -72,7 +72,7 @@ class _StocksPageState extends State<StocksPage> {
                                     children: const [
                                       Center(
                                           child: Text(
-                                        "No New Stock",
+                                        "No Products",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,

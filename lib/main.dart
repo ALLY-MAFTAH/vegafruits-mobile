@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:vegafruits/layout.dart';
 import 'package:vegafruits/providers/customer_provider.dart';
+import 'package:vegafruits/providers/good_provider.dart';
 import 'package:vegafruits/providers/order_provider.dart';
 import 'package:vegafruits/providers/sale_provider.dart';
 import 'package:vegafruits/providers/stock_provider.dart';
@@ -32,6 +33,7 @@ class _MyAppState extends State<MyApp> {
   final DataProvider dataProvider = DataProvider();
   final OrderProvider orderProvider = OrderProvider();
   final SaleProvider saleProvider = SaleProvider();
+  final GoodProvider goodProvider = GoodProvider();
   final StockProvider stockProvider = StockProvider();
   final CustomerProvider customerProvider = CustomerProvider();
 
@@ -92,7 +94,8 @@ class _MyAppState extends State<MyApp> {
       }
     });
     // orderProvider.getAllOrders();
-    // saleProvider.getAllGoods();
+    // saleProvider.getAllSales();
+    // goodProvider.getAllGoods();
     // stockProvider.getAllStocks();
     // customerProvider.getAllCustomers();
     super.initState();
@@ -117,6 +120,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider.value(
           value: orderProvider,
+        ),
+        ChangeNotifierProvider.value(
+          value: goodProvider,
         ),
         ChangeNotifierProvider.value(
           value: saleProvider,

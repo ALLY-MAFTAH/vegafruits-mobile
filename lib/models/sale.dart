@@ -1,79 +1,45 @@
-import 'package:vegafruits/models/customer.dart';
-import 'item.dart';
+import 'package:vegafruits/models/good.dart';
 
 class Sale {
   int? id;
-  int? status;
-  int? isPaid;
-  int? wasContacted;
+  int? userId;
   int? customerId;
-  String? number;
+  String? seller;
   String? date;
-  String? servedBy;
-  String? servedDate;
-  double? totalAmount;
-  String? deliveryTime;
-  String? deliveryDate;
-  String? deliveryLocation;
-  Customer? customer;
-  List<Item>? items;
+  double? amountPaid;
+  List<Good>? goods;
 
   Sale({
     this.id,
-    this.status,
-    this.isPaid,
-    this.wasContacted,
-    this.number,
-    this.date,
+    this.userId,
     this.customerId,
-    this.servedBy,
-    this.servedDate,
-    this.totalAmount,
-    this.deliveryTime,
-    this.deliveryDate,
-    this.deliveryLocation,
-    this.customer,
-    this.items,
+    this.seller,
+    this.date,
+    this.amountPaid,
+    this.goods,
   });
 
   Sale.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    number = json['number'];
-    status = json['status'];
-    isPaid = json['is_paid'];
-    wasContacted = json['was_contacted'];
-    date = json['date'];
+    userId = json['user_id'];
     customerId = json['customer_id'];
-    servedBy = json['served_by'];
-    servedDate = json['served_date'];
-    totalAmount = json['total_amount']?.toDouble();
-    deliveryTime = json['delivery_time'];
-    deliveryDate = json['delivery_date'];
-    deliveryLocation = json['delivery_location'];
-    customer = Customer.fromJson(json['customer']);
-    items = (json['items'] as List<dynamic>?)
-        ?.map((item) => Item.fromJson(item))
+    seller = json['seller'];
+    date = json['date'];
+    amountPaid = json['amount_paid'].toDouble();
+    goods = (json['goods'] as List<dynamic>?)
+        ?.map((good) => Good.fromJson(good))
         .toList();
   }
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = <String, dynamic>{};
-
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['status'] = status;
-    data['isPaid'] = isPaid;
-    data['wasContacted'] = wasContacted;
-    data['number'] = number;
-    data['date'] = date;
+    data['userId'] = userId;
     data['customerId'] = customerId;
-    data['servedBy'] = servedBy;
-    data['servedDate'] = servedDate;
-    data['totalAmount'] = totalAmount;
-    data['deliveryTime'] = deliveryTime;
-    data['deliveryDate'] = deliveryDate;
-    data['deliveryLocation'] = deliveryLocation;
-    data['customer'] = customer?.toJson();
-    data['items'] = items?.map((item) => item.toJson()).toList();
+    data['seller'] = seller;
+    data['date'] = date;
+    data['amountPaid'] = amountPaid;
+    data['goods'] = goods?.map((good) => good.toJson()).toList();
 
     return data;
   }

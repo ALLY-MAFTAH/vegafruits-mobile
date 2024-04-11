@@ -200,7 +200,7 @@ class OrderProvider extends ChangeNotifier {
       }
       try {
         final url = Uri.parse('$baseApi$markOrderAsServed${order.id}');
-
+print(url);
         final headers = {
           'Content-Type': 'application/json',
         };

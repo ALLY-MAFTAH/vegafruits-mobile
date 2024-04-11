@@ -8,23 +8,23 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/api.dart';
-import '../models/sale.dart';
+import '../models/good.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-class SaleProvider extends ChangeNotifier {
+class GoodProvider extends ChangeNotifier {
   bool hasError = false;
-  Sale selectedSale = Sale();
+  Good selectedGood = Good();
 
   //
   //
   // ********** ORDERS DATA ***********
-  List<Sale> _sales = [];
-  List<Sale> get sales => _sales;
-  set setSales(List emptySales) => _sales = [];
+  List<Good> _goods = [];
+  List<Good> get goods => _goods;
+  set setGoods(List emptyGoods) => _goods = [];
 
-  Future<void> getAllSales() async {
+  Future<void> getAllGoods() async {
     hasError = true;
-    List<Sale> fetchedSales = [];
+    List<Good> fetchedGoods = [];
 
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -37,26 +37,27 @@ class SaleProvider extends ChangeNotifier {
 
     try {
       final response = await http
-          .get(Uri.parse('$baseApi$getSales'))
+          .get(Uri.parse('$baseApi$getGoods'))
           .timeout(const Duration(seconds: 10), onTimeout: () {
         hasError = false;
         notifyListeners();
         throw TimeoutException("Connection Problem, Please Try Again Latter");
       });
 
+print(response);
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        data['sales'].forEach(($sale) {
-          final dataSet = Sale.fromJson($sale);
-          fetchedSales.add(dataSet);
+        data['goods'].forEach(($good) {
+          final dataSet = Good.fromJson($good);
+          fetchedGoods.add(dataSet);
         });
 
-        _sales = fetchedSales;
+        _goods = fetchedGoods;
         hasError = false;
         notifyListeners();
-        print(fetchedSales);
+        print(fetchedGoods);
       }
-      print(sales);
+      print(goods);
     } catch (e) {
       print('EXCEPTIONNNNNNNNNNNNNNN::::::::');
       print(e);
@@ -83,4 +84,5 @@ class SaleProvider extends ChangeNotifier {
       throw 'Could not launch $phoneNumber';
     }
   }
+
 }
